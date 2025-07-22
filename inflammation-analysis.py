@@ -3,8 +3,10 @@
 
 import argparse
 import os
+import os
 
 from inflammation import models, views
+from inflammation.compute_data import analyse_data
 from inflammation.compute_data import analyse_data
 
 
@@ -24,6 +26,10 @@ def main(args):
         analyse_data(os.path.dirname(infiles[0]))
         return
 
+    if args.full_data_analysis:
+        analyse_data(os.path.dirname(infiles[0]))
+        return
+
     for filename in in_files:
         inflammation_data = models.load_csv(filename)
 
@@ -34,6 +40,7 @@ def main(args):
         views.visualize(view_data)
 
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='A basic patient inflammation data management system')
@@ -42,6 +49,11 @@ if __name__ == "__main__":
         'infiles',
         nargs='+',
         help='Input CSV(s) containing inflammation series for each patient')
+
+    parser.add_argument(
+        '--full-data-analysis',
+        action='store_true',
+        dest='full_data_analysis')
 
     parser.add_argument(
         '--full-data-analysis',
