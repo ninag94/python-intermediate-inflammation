@@ -1,3 +1,27 @@
+# Python virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Test reports
+htmlcov/
+coverage.xml
+
+# VS Code settings
+.vscode/
+
+# macOS system files
+.DS_Store
+
 # IDEs
 .vscode/
 .idea/
