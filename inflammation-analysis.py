@@ -15,7 +15,7 @@ def main(args):
     """
     in_files = args.in_files
     if not isinstance(in_files, list):
-        in_files = [args.in_files]
+        in_files = [args.in_file_files]
 
 
     for filename in in_files:
