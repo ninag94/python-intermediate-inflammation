@@ -13,7 +13,7 @@ def main(args):
     - selecting the necessary models and views for the current task
     - passing data between models and views
     """
-    in_files = args.infiles
+    in_files = args.in_files
     if not isinstance(in_files, list):
         in_files = [args.infiles]
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         description='A basic patient inflammation data management system')
 
     parser.add_argument(
-        'infiles',
+        'in_files',
         nargs='+',
         help='Input CSV(s) containing inflammation series for each patient')
 
