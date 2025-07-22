@@ -7,16 +7,61 @@ inflammation data for a single patient taken over a number of days
 and each column represents a single day across all patients.
 """
 
+import json
+import glob
+import os
 import numpy as np
 
 
-def load_csv(filename):  
+def load_csv(filename):
     """Load a Numpy array from a CSV
 
     :param filename: Filename of CSV to load
     """
     return np.loadtxt(fname=filename, delimiter=',')
 
+def load_json(filename):
+    """Load a numpy array from a JSON document.
+    
+    Expected format:
+    [
+      {
+        "observations": [0, 1]
+      },
+      {
+        "observations": [0, 2]
+      }    
+    ]
+    :param filename: Filename of CSV to load
+    """
+    with open(filename, 'r', encoding='utf-8') as file:
+        data_as_json = json.load(file)
+        return [np.array(entry['observations']) for entry in data_as_json]
+
+class GeneralDataSource:
+    def __init__(self, dir_path, file_pattern='*'):
+        self.dir_path = dir_path
+        self.file_pattern = file_pattern  # e.g., 'data*.csv'
+
+    def _load_file(self, file_path):
+        ext = os.path.splitext(file_path)[1].lower()
+        if ext == '.csv':
+            return np.loadtxt(file_path, delimiter=',')
+        elif ext == '.json':
+            with open(file_path, 'r') as f:
+                return json.load(f)
+        elif ext == '.txt':
+            with open(file_path, 'r') as f:
+                return f.read()
+        else:
+            raise ValueError(f"Unsupported file type: {ext}")
+
+    def load_data(self):
+        pattern = os.path.join(self.dir_path, self.file_pattern)
+        file_paths = glob.glob(pattern)
+        if not file_paths:
+            raise ValueError(f"No files found in {self.dir_path} matching pattern '{self.file_pattern}'")
+        return [self._load_file(fp) for fp in file_paths]
 
 def daily_mean(data):
     """Calculate the daily mean of a 2d inflammation data array."""
@@ -31,4 +76,5 @@ def daily_max(data):
 def daily_min(data):
     """Calculate the daily min of a 2d inflammation data array."""
     return np.min(data, axis=0)
+
 
